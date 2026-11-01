@@ -1,20 +1,69 @@
-generator client {
-  provider = "prisma-client-js"
-}
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
 model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  users     User[]
+  id String @id @default(uuid())
+  name String
+  industry String?
+  users User[]
+  suppliers Supplier[]
+  parts Part[]
 }
 model User {
-  id        String   @id @default(uuid())
-  tenantId  String
-  email     String   @unique
-  password  String
-  role      String   @default("Inspector")
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  id String @id @default(uuid())
+  tenantId String
+  email String @unique
+  passwordHash String
+  fullName String
+  role String @default("Inspector")
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  inspections Inspection[]
+}
+model Supplier {
+  id String @id @default(uuid())
+  tenantId String
+  supplierCode String
+  name String
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  parts Part[]
+  @@unique([tenantId, supplierCode])
+}
+model Part {
+  id String @id @default(uuid())
+  tenantId String
+  partNumber String
+  partName String
+  supplierId String
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+  inspections Inspection[]
+  pirs PIR[]
+  @@unique([tenantId, partNumber])
+}
+model Inspection {
+  id String @id @default(uuid())
+  tenantId String
+  partId String
+  inspectorId String
+  inspectionLocation String
+  status String @default("UnderReview")
+  part Part @relation(fields: [partId], references: [id])
+  inspector User @relation(fields: [inspectorId], references: [id])
+  results InspectionResult[]
+}
+model InspectionResult {
+  id String @id @default(uuid())
+  inspectionId String
+  result String
+  severity String?
+  defectCode String?
+  inspection Inspection @relation(fields: [inspectionId], references: [id])
+}
+model PIR {
+  id String @id @default(uuid())
+  tenantId String
+  pirNumber String @unique
+  partId String
+  status String @default("OPEN")
+  part Part @relation(fields: [partId], references: [id])
 }
