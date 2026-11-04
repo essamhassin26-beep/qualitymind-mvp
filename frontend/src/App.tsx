@@ -1,11 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import PIRs from './pages/PIRs';
+import Suppliers from './pages/Suppliers';
+import Inspection from './pages/Inspection';
+
 export default function App() {
   return (
     <BrowserRouter>
-      <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-        <h1>QualityMind AI MVP</h1>
-        <p>المنصة شغالة بنجاح! 🎉</p>
-      </div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="pirs" element={<PIRs />} />
+          <Route path="suppliers" element={<Suppliers />} />
+          <Route path="inspection" element={<Inspection />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }
