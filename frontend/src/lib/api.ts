@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({ 
-  baseURL: 'http://10.235.41.100:3000/api' 
+  baseURL: 'https://qualitymind-mvp.onrender.com/api' 
 });
 
 api.interceptors.request.use((config) => {
