@@ -1205,7 +1205,7 @@ function ComingSoon({ label, note }) {
 }
 
 export default function QualityMindMockup() {
-  const [liveParts, setLiveParts] = useState([]);
+  const [liveParts, setLiveParts] = useState<any[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
