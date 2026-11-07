@@ -152,7 +152,18 @@ function Masthead() {
           <TrackedLabel color={C.gold}>NISSAN MOTOR EGYPT · SUPPLIER QUALITY</TrackedLabel>
         </div>
       </div>
-      <Badge tone="ok"><span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: C.ok }} /> النظام متصل</Badge>
+      <button onClick={async () => {
+  try {
+    const res = await fetch('https://qualitymind-mvp.onrender.com/api/auth/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: 'admin@nissan.com.eg', password: 'Admin@123'})
+    });
+    if(res.ok) alert('✅ متصل بالسيرفر الحقيقي بنجاح! الدنيا شغالة!');
+    else alert('❌ فشل الاتصال: ' + res.status);
+  } catch(e) { alert('❌ السيرفر صاحي؟ (قد يستغرق 50 ثانية للاستيقاظ)'); }
+}} className="qm-mono px-3 py-1.5 rounded text-xs font-medium inline-flex items-center gap-1" style={{ background: C.okDim, color: C.ok, border: `1px solid ${C.ok}55` }}>
+  <span className="w-1.5 h-1.5 rounded-full inline-block animate-pulse" style={{ background: C.ok }} /> اختبار الاتصال
+</button>
     </div>
   );
 }
@@ -1269,7 +1280,18 @@ export default function QualityMindMockup() {
             <span className="qm-sans font-semibold" style={{ color: C.cyan, fontSize: 12 }}>م. عصام أبو زيد</span>
           </div>
           <div className="flex items-center gap-2 px-1">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: C.ok, boxShadow: `0 0 6px ${C.ok}` }} />
+            <button onClick={async () => {
+  try {
+    const res = await fetch('https://qualitymind-mvp.onrender.com/api/auth/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: 'admin@nissan.com.eg', password: 'Admin@123'})
+    });
+    if(res.ok) alert('✅ متصل بالسيرفر الحقيقي بنجاح!');
+    else alert('❌ فشل الاتصال: ' + res.status);
+  } catch(e) { alert('❌ السيرفر صاحي؟'); }
+}} className="qm-sans text-xs px-2 py-1 rounded" style={{ background: C.okDim, color: C.ok, border: `1px solid ${C.ok}55` }}>
+  اختبار الاتصال
+</button>
             <span className="qm-sans" style={{ color: C.ok, fontSize: 11 }}>النظام متصل</span>
           </div>
         </div>
