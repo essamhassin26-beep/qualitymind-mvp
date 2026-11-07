@@ -18,7 +18,6 @@ export class PartsService {
         }),
       },
       include: { supplier: true },
-      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -27,7 +26,6 @@ export class PartsService {
       where: { id, tenantId },
       include: {
         supplier: true,
-        controlPlans: { where: { isActive: true }, take: 1 },
       },
     });
     if (!part) throw new NotFoundException('Part not found');
