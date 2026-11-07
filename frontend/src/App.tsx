@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { api } from "./lib/api";
 import {
   QrCode, Camera, AlertTriangle, CheckCircle2, XCircle,
   Factory, Gauge, Wrench, ClipboardList, ArrowLeft, Circle,
@@ -1204,6 +1205,31 @@ function ComingSoon({ label, note }) {
 }
 
 export default function QualityMindMockup() {
+  const [liveParts, setLiveParts] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const loginRes = await api.post('/auth/login', { email: 'admin@nissan.com.eg', password: 'Admin@123' });
+        const token = loginRes.data.access_token;
+        const partsRes = await api.get('/parts', { headers: { Authorization: `Bearer ${token}` } });
+        if (partsRes.data && partsRes.data.length > 0) {
+          const mapped = partsRes.data.map(p => ({
+            id: p.id,
+            name: p.partName,
+            pn: p.partNumber,
+            supplier: p.supplier?.name || 'Real Supplier',
+            code: 'API',
+            model: 'N17',
+            important: p.importantPartClass || 'A',
+            real: true
+          }));
+          setLiveParts(mapped);
+        }
+      } catch (e) { console.error("Error fetching live data", e); }
+    };
+    fetchData();
+  }, []);
+
   const [realParts, setRealParts] = useState([]);
 
   useEffect(() => {
