@@ -767,9 +767,10 @@ function DispositionRow({ point, value, onChange }) {
   );
 }
 
-function InspectionSheetBrowser({ typeFilter, isMobile }) {
+function InspectionSheetBrowser({ typeFilter, isMobile, partsList }) {
   const [query, setQuery] = useState("");
-  const scoped = typeFilter ? PARTS_LIST.filter((p) => (typeFilter === "CKD" ? p.supplier.includes("CKD") : !p.supplier.includes("CKD"))) : PARTS_LIST;
+  const safeParts = partsList && partsList.length > 0 ? partsList : PARTS_LIST;
+  const scoped = typeFilter ? safeParts.filter((p) => (typeFilter === "CKD" ? p.supplier.includes("CKD") : !p.supplier.includes("CKD"))) : safeParts;
   const [selectedId, setSelectedId] = useState(scoped[0]?.id || 3);
   const [disp, setDisp] = useState({});
 
@@ -1203,6 +1204,42 @@ function ComingSoon({ label, note }) {
 }
 
 export default function QualityMindMockup() {
+  const [realParts, setRealParts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const loginRes = await fetch('https://qualitymind-mvp.onrender.com/api/auth/login', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email: 'admin@nissan.com.eg', password: 'Admin@123'})
+        });
+        const loginData = await loginRes.json();
+        const token = loginData.access_token;
+
+        const partsRes = await fetch('https://qualitymind-mvp.onrender.com/api/parts', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const partsData = await partsRes.json();
+        if (Array.isArray(partsData) && partsData.length > 0) {
+          const mapped = partsData.map((p) => ({
+            id: p.id,
+            name: p.partName,
+            pn: p.partNumber,
+            supplier: p.supplier?.name || 'Real Supplier',
+            code: 'API',
+            model: 'N17',
+            important: p.importantPartClass || 'B',
+            real: true
+          }));
+          setRealParts(mapped);
+        }
+      } catch (e) {
+        console.error("API Error", e);
+      }
+    };
+    fetchData();
+  }, []);
+
   const [isTesting, setIsTesting] = useState(false);
   const testConnection = async () => {
     setIsTesting(true);
@@ -1236,8 +1273,8 @@ export default function QualityMindMockup() {
 
   const renderContent = () => {
     switch (section) {
-      case "local": return <InspectionSheetBrowser typeFilter="Local" isMobile={isMobile} />;
-      case "ckd": return <InspectionSheetBrowser typeFilter="CKD" isMobile={isMobile} />;
+      case "local": return <InspectionSheetBrowser typeFilter="Local" isMobile={isMobile} partsList={realParts} />;
+      case "ckd": return <InspectionSheetBrowser typeFilter="CKD" isMobile={isMobile} partsList={realParts} />;
       case "line": return <ContainmentScreen />;
       case "supplier-insp": return <SourceInspectionScreen />;
       case "dphu": return <DPHUScreen />;
