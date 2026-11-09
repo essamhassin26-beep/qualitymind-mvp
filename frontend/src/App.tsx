@@ -1221,6 +1221,7 @@ export default function QualityMindMockup() {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const partsData = await partsRes.json();
+        alert('رد السيرفر: ' + JSON.stringify(partsData));
         if (Array.isArray(partsData) && partsData.length > 0) {
           const mapped = partsData.map((p) => ({
             id: p.id,
