@@ -21,4 +21,9 @@ export class PartsController {
   create(@Req() req: any, @Body() body: any) {
     return this.service.create(req.user.tenantId, body);
   }
+
+  @Post('bulk')
+  bulkCreate(@Req() req: any, @Body() body: any[]) {
+    return this.service.bulkCreate(req.user.tenantId, body);
+  }
 }
