@@ -76,10 +76,6 @@ function Panel({ children, className = "", style = {}, glow }) {
     >
       {children}
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -119,10 +115,6 @@ function Gauge_({ value, max, label, unit, tone = "cyan", size = 122 }) {
       </div>
       <span className="qm-sans text-center mt-2.5" style={{ color: C.textDim, fontSize: 12, maxWidth: size + 24, lineHeight: 1.4 }}>{label}</span>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -174,10 +166,6 @@ function Masthead() {
   <span className="w-1.5 h-1.5 rounded-full inline-block animate-pulse" style={{ background: C.ok }} /> اختبار الاتصال
 </button>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -315,10 +303,6 @@ function MobileScreen() {
         )}
       </div>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -344,10 +328,6 @@ function RiskBar({ name, risk, ppm }) {
       <span className="qm-mono w-10 text-right" style={{ color: tone, fontSize: 12 }}>{risk}%</span>
       <span className="qm-mono w-16 text-right" style={{ color: C.textFaint, fontSize: 11 }}>{ppm} PPM</span>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -716,10 +696,6 @@ function EditableStat({ label, value, unit, onSave, tone = C.cyan }) {
         </div>
       )}
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -730,10 +706,6 @@ function RefImage({ label, tone, Icon }) {
       <Icon size={26} color={tone} strokeWidth={1.4} />
       <TrackedLabel color={tone}>{label}</TrackedLabel>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -893,7 +865,6 @@ function SheetBody({ selected, counts, points, disp, setPointDisp, mobile }) {
           <DispositionRow key={i} point={pt} value={disp[i]} onChange={(v) => setPointDisp(i, v)} />
         ))}
       </div>
-    </>
   );
 }
 
@@ -1184,10 +1155,6 @@ function KaizenScreen() {
         </div>
       </Panel>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
@@ -1266,19 +1233,6 @@ export default function QualityMindMockup() {
     fetchData();
   }, []);
 
-  const [isTesting, setIsTesting] = useState(false);
-  const testConnection = async () => {
-    setIsTesting(true);
-    try {
-      const res = await fetch('https://qualitymind-mvp.onrender.com/api/auth/login', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email: 'admin@nissan.com.eg', password: 'Admin@123'})
-      });
-      if(res.ok) alert('✅ متصل بالسيرفر الحقيقي بنجاح! المنصة شغالة!');
-      else alert('❌ فشل الاتصال: ' + res.status);
-    } catch(e) { alert('❌ السيرفر صاحي؟ (ممكن ياخد 50 ثانية)'); }
-    setIsTesting(false);
-  };
 
   const [section, setSection] = useState("local");
   const isMobile = useIsMobile();
@@ -1362,7 +1316,6 @@ export default function QualityMindMockup() {
   }
 
   return (
-    <>
     <div dir="rtl" className="min-h-screen w-full flex" style={{ background: "#05070A" }}>
       <FontImport />
       {/* Vertical sidebar — desktop */}
@@ -1414,10 +1367,6 @@ export default function QualityMindMockup() {
         </div>
       </div>
     </div>
-    <button onClick={testConnection} style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: '#34C77B', color: 'black', padding: '10px', borderRadius: '5px', fontWeight: 'bold' }}>
-      {isTesting ? 'جاري الاختبار...' : 'Test API'}
-    </button>
-    </>
   );
 }
 
