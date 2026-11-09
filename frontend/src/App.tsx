@@ -122,7 +122,7 @@ function InspectionSheetBrowser({ typeFilter, isMobile, partsList = PARTS_LIST }
 
   const filtered = scoped.filter((p: any) => p.name.includes(query) || p.pn.includes(query));
   const selected = scoped.find((p: any) => p.id === selectedId) || scoped[0];
-  const points = SHEET_POINTS[selected.id] || DEFAULT_POINTS;
+  const points = selected.checkPoints && selected.checkPoints.length > 0 ? selected.checkPoints : (SHEET_POINTS[selected.id] || DEFAULT_POINTS);
   const counts = points.reduce((acc: any, _: any, i: number) => { const v = disp[i]; if (v) acc[v] = (acc[v] || 0) + 1; return acc; }, {});
 
   const PartsListPanel = () => (
