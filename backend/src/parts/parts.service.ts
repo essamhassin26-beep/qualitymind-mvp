@@ -30,8 +30,25 @@ export class PartsService {
     return part;
   }
 
-  create(tenantId: string, data: any) {
-    return this.prisma.part.create({ data: { ...data, tenantId } });
+  async create(tenantId: string, data: any) {
+    let supplier = await this.prisma.supplier.findFirst({ where: { tenantId } });
+    if (!supplier) {
+      supplier = await this.prisma.supplier.create({
+        data: { tenantId, supplierCode: 'DEFAULT', name: 'Default Supplier' }
+      });
+    }
+    
+    return this.prisma.part.upsert({
+      where: { tenantId_partNumber: { tenantId, partNumber: data.partNumber } },
+      update: { partName: data.partName, checkPoints: data.checkPoints },
+      create: {
+        tenantId,
+        partNumber: data.partNumber,
+        partName: data.partName,
+        supplierId: supplier.id,
+        checkPoints: data.checkPoints,
+      }
+    });
   }
 
   async bulkCreate(tenantId: string, data: any[]) {

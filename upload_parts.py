@@ -2,6 +2,7 @@ import openpyxl
 import requests
 import glob
 import os
+import time
 
 FOLDER_PATH = "./excel_files" 
 API_URL = "https://qualitymind-mvp.onrender.com/api"
@@ -23,23 +24,27 @@ for file_path in excel_files:
     
     for sheet_name in wb.sheetnames:
         sheet = wb[sheet_name]
-        parts_to_upload = []
         
         for row in sheet.iter_rows(values_only=True):
             if row[1] and isinstance(row[1], str) and row[10] and isinstance(row[10], str):
-                if any(x in str(row[1]) for x in ["ASSY", "GLASS", "CUSH", "FIN", "HARN", "SEAT", "BATTERY", "SPEAKER"]):
-                    parts_to_upload.append({
-                        "partName": str(row[1]).strip(),
-                        "partNumber": str(row[10]).strip(),
+                part_name = str(row[1]).strip()
+                part_no = str(row[10]).strip()
+                
+                if any(x in part_name for x in ["ASSY", "GLASS", "CUSH", "FIN", "HARN", "SEAT", "BATTERY", "SPEAKER"]):
+                    payload = {
+                        "partName": part_name,
+                        "partNumber": part_no,
                         "checkPoints": [{"item": "فحص عام", "key": "مطابقة العينة", "severity": "V2"}]
-                    })
-
-        if parts_to_upload:
-            print(f"  -> Uploading {len(parts_to_upload)} parts from {sheet_name}...")
-            res = requests.post(f"{API_URL}/parts/bulk", json=parts_to_upload, headers=headers)
-            if res.status_code == 201 or res.status_code == 200:
-                print(f"     Uploaded successfully!")
-            else:
-                print(f"     Failed: {res.text}")
+                    }
+                    
+                    # بنبعت قطعة واحدة بس في كل طلب
+                    res = requests.post(f"{API_URL}/parts", json=payload, headers=headers)
+                    
+                    if res.status_code in [201, 200]:
+                        print(f"  ✅ Uploaded: {part_no}")
+                    else:
+                        print(f"  ❌ Failed: {part_no} - {res.text}")
+                    
+                    time.sleep(1) # نستنى ثانية عشان السيرفر يرتاح
 
 print("Done!")
