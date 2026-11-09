@@ -36,6 +36,12 @@ const C = {
 };
 
 function FontImport() {
+  if (debugMsg !== "تم") return (
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, background: '#E5484D', color: 'white', padding: '20px', textAlign: 'center', fontWeight: 'bold', fontFamily: 'monospace', direction: 'ltr' }}>
+      {debugMsg}
+    </div>
+  );
+
   return (
     <style>{`
       @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
@@ -1180,6 +1186,8 @@ function ComingSoon({ label, note }) {
 }
 
 export default function QualityMindMockup() {
+  const [debugMsg, setDebugMsg] = useState("جاري الاتصال بالسيرفر...");
+
   const [liveParts, setLiveParts] = useState<any[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -1221,6 +1229,7 @@ export default function QualityMindMockup() {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const partsData = await partsRes.json();
+        setDebugMsg("رد السيرفر: " + JSON.stringify(partsData));
         alert('رد السيرفر: ' + JSON.stringify(partsData));
         if (Array.isArray(partsData) && partsData.length > 0) {
           const mapped = partsData.map((p) => ({
