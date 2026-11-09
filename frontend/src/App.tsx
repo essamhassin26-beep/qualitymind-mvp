@@ -1299,8 +1299,8 @@ export default function QualityMindMockup() {
 
   const renderContent = () => {
     switch (section) {
-      case "local": return <InspectionSheetBrowser typeFilter="Local" isMobile={isMobile} partsList={realParts} />;
-      case "ckd": return <InspectionSheetBrowser typeFilter="CKD" isMobile={isMobile} partsList={realParts} />;
+      case "local": return <InspectionSheetBrowser typeFilter="Local" isMobile={isMobile} partsList={liveParts} />;
+      case "ckd": return <InspectionSheetBrowser typeFilter="CKD" isMobile={isMobile} partsList={liveParts} />;
       case "line": return <ContainmentScreen />;
       case "supplier-insp": return <SourceInspectionScreen />;
       case "dphu": return <DPHUScreen />;
